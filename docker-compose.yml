@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  otelcollector:
+    image: otel/opentelemetry-collector
+    container_name: otelcollector
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "7777:7777"
+      - "55679:55679"
+      - "8888:8888"
+    volumes:
+      - ${PWD}/otel-collector.yaml:/otel-collector.yaml
+    command: --config otel-collector.yaml
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ${PWD}/prometheus.yaml:/prometheus.yaml
+    container_name: prometheus
+    command: --config.file=/prometheus.yaml --log.level=debug
